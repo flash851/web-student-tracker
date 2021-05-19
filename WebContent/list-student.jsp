@@ -26,11 +26,19 @@
 		<table>
 			<tr>
 				<th>First Name</th>
-				<th>First Name</th>
-				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Email</th>
+				<th>Action</th>
 			</tr>
 			<%-- <%for(Student tempStudent:students){%> --%>
 			<c:forEach var="tempStudent" items="${STUDENTS_LIST}">
+			
+			<!-- set up a link for each student -->
+			<c:url var="tempLink" value="StudentControllerSrvlet">
+				<c:param name="command" value="LOAD"/>
+				<c:param name="studentId" value="${tempStudent.id }"/>
+			</c:url>
+			
 			<tr>
 				<%-- <td><%=tempStudent.getFirstName()%></td>
 				<td><%=tempStudent.getLastName() %></td>
@@ -38,6 +46,7 @@
 				<td>${tempStudent.firstName}</td>
 				<td>${tempStudent.lastName}</td>
 				<td>${tempStudent.email}</td>
+				<td><a href="${tempLink}" >Update</a></td>
 			</tr>
 			</c:forEach>	
 			<%-- <%}%> --%>

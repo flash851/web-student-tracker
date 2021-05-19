@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import com.sun.org.apache.xpath.internal.axes.RTFIterator;
+
 /**
  * Servlet implementation class StudentControllerSrvlet
  */
@@ -59,6 +61,10 @@ public class StudentControllerSrvlet extends HttpServlet {
 			case "ADD":
 				addStudent(request,response);
 				break;
+			case "LOAD":
+				loadStudent(request,response);
+			case "UPDATE":
+				updateStudent(request,response);
 			default:
 				listStudents(request,response);
 			}
@@ -69,6 +75,42 @@ public class StudentControllerSrvlet extends HttpServlet {
 			throw new ServletException(e);
 		}
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+	private void updateStudent(HttpServletRequest request, HttpServletResponse response)throws Exception {
+		// TODO Auto-generated method stub
+		
+		//read student info from form data
+		int id=Integer.parseInt(request.getParameter("studentId"));
+		String firstName=request.getParameter("firstName");
+		String lastName=request.getParameter("lastName");
+		String email=request.getParameter("email");
+		System.out.println(id+" "+firstName+" "+lastName+" "+email);
+		// create a new student object
+		Student theStudent=new Student(id,firstName,lastName,email);
+		
+		//perform update on database
+		studentsDbUtils.updateStudent(theStudent);
+		
+		//send them back to the "list student page"
+		
+		listStudents(request, response);
+		
+		//
+		
+	}
+	private void loadStudent(HttpServletRequest request, HttpServletResponse response)throws Exception {
+		// TODO Auto-generated method stub
+		
+		//read student id from form data
+		String theStudentId=request.getParameter("studentId");
+		// getting student from database
+		Student theStudent=studentsDbUtils.getStudent(theStudentId);
+		//place student in the request attribute
+		request.setAttribute("THE_STUDENT", theStudent);
+		//send to jsp page: update-student-form.jsp
+		RequestDispatcher dispatcher=request.getRequestDispatcher("/update-student-form.jsp");
+		dispatcher.forward(request, response);
+		
 	}
 	private void addStudent(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
