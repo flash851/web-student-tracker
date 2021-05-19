@@ -1,12 +1,15 @@
 package com.flash.web.jdbc;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
+
+import com.mysql.cj.xdevapi.PreparableStatement;
 
 public class StudentsDbUtils {
 	
@@ -30,6 +33,7 @@ public class StudentsDbUtils {
 		myRs=mystmt.executeQuery(sql);
 		//process resultset
 		while(myRs.next())
+			
 		{
 			//retrieve data from the result set row
 			int id=myRs.getInt("id");
@@ -64,6 +68,35 @@ public class StudentsDbUtils {
 		
 		catch(Exception e) {
 			e.printStackTrace();
+		}
+	}
+	public void addStudents(Student theStudent) {
+		// TODO Auto-generated method stub
+		Connection myConn=null;
+		PreparedStatement myStmt=null;
+		try
+		{
+		//get db connection
+		myConn=dataSource.getConnection();
+		
+		// create sql for insert
+		String sql="insert into student "+"(first_name, last_name, email) "+"values(?,?,?)";
+		myStmt=myConn.prepareStatement(sql);
+		
+		//set the param values for the student
+		myStmt.setString(1, theStudent.getFirstName());
+		myStmt.setString(2, theStudent.getLastName());
+		myStmt.setString(3, theStudent.getEmail());
+		
+		//execute sql insert
+		myStmt.execute();
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(myConn,myStmt,null);
 		}
 	}
 }
