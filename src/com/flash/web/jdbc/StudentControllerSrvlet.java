@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import com.sun.org.apache.xpath.internal.axes.RTFIterator;
+
 
 /**
  * Servlet implementation class StudentControllerSrvlet
@@ -63,8 +63,13 @@ public class StudentControllerSrvlet extends HttpServlet {
 				break;
 			case "LOAD":
 				loadStudent(request,response);
+				break;
 			case "UPDATE":
 				updateStudent(request,response);
+				break;
+			case "DELETE":
+				deleteStudent(request,response);
+				break;
 			default:
 				listStudents(request,response);
 			}
@@ -75,6 +80,16 @@ public class StudentControllerSrvlet extends HttpServlet {
 			throw new ServletException(e);
 		}
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+	private void deleteStudent(HttpServletRequest request, HttpServletResponse response)throws Exception {
+		// TODO Auto-generated method stub
+		
+		//read student id from form data
+		String theStudentId=request.getParameter("studentId");
+		//delete student from database
+		studentsDbUtils.deleteStudent(theStudentId);
+		//send them back to list student page
+		listStudents(request, response);
 	}
 	private void updateStudent(HttpServletRequest request, HttpServletResponse response)throws Exception {
 		// TODO Auto-generated method stub

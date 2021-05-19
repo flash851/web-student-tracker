@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import com.mysql.cj.xdevapi.PreparableStatement;
@@ -172,6 +174,33 @@ public class StudentsDbUtils {
 		finally
 		{
 			// JDBC object clean Up
+			close(myConn,myStmt,null);
+		}
+	}
+	public void deleteStudent(String theStudentId) {
+		// TODO Auto-generated method stub
+		Connection myConn=null;
+		PreparedStatement myStmt=null;
+		try
+		{
+			//convertt student id to int
+			int studentId=Integer.parseInt(theStudentId);
+			// get connection to database
+			myConn=dataSource.getConnection();
+			// create sql statement for the delete
+			String sql="delete from student where "+"id=?";
+			//prepared statement
+			myStmt=myConn.prepareStatement(sql);
+			//set the params
+			myStmt.setInt(1, studentId);
+			//execute the sql
+			myStmt.execute();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
 			close(myConn,myStmt,null);
 		}
 	}

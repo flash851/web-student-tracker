@@ -39,6 +39,12 @@
 				<c:param name="studentId" value="${tempStudent.id }"/>
 			</c:url>
 			
+			<!-- set up a link for delete each student -->
+			<c:url var="deleteLink" value="StudentControllerSrvlet">
+				<c:param name="command" value="DELETE"/>
+				<c:param name="studentId" value="${tempStudent.id }"/>
+			</c:url>
+			
 			<tr>
 				<%-- <td><%=tempStudent.getFirstName()%></td>
 				<td><%=tempStudent.getLastName() %></td>
@@ -46,7 +52,11 @@
 				<td>${tempStudent.firstName}</td>
 				<td>${tempStudent.lastName}</td>
 				<td>${tempStudent.email}</td>
-				<td><a href="${tempLink}" >Update</a></td>
+				<td>
+				<a href="${tempLink}" >Update</a>
+				|
+				<a href="${deleteLink}" onclick="if(!(confirm('Are you sure want to delete this student')))return false" >Delete</a>
+				</td>
 			</tr>
 			</c:forEach>	
 			<%-- <%}%> --%>
